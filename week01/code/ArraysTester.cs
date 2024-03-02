@@ -39,7 +39,27 @@ public static class ArraysTester {
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
 
-        return new double[0]; // replace this return statement with your own
+        /* --------- Plan for implementing the MultiplesOf function ---------
+        First, declare a new doubles array called "results", which we will return at the end. The length of the array is "length" (from the function).
+        Next, declare a double called "multiplier" that is equal to 1.
+        Then, create a for loop that loops "length" number of times.
+        Within the loop, declare a double called "multiple" that is equal to number * multiplier.
+        Assign multiple to results[i].
+        Increment multiplier by 1.
+        Close the for loop and return "results".
+        */
+
+        double[] results = new double[length];
+        double multiplier = 1;
+
+        for (int i = 0; i < length; i++)
+        {
+            double multiple = number * multiplier;
+            results[i] = multiple;
+            multiplier++;
+        }
+
+        return results; // replace this return statement with your own
     }
     
     /// <summary>
@@ -56,6 +76,18 @@ public static class ArraysTester {
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
+
+        /* --------- Plan for implementing the RotateListRight function ---------
+        First, create a new List<int> called "movedData" (or whatever you'd like), and assign it to the portion of "data" that needs to be moved.
+        Do this by using GetRange() and passing in the difference between data.Count and "amount" as the index, and then "amount" as the count.
+        Next, use RemoveRange() to remove the same range as above from "data".
+        Lastly, use InsertRange() to insert movedData to the front of "data".
+        */
+
+        List<int> movedData = new List<int>();
+        movedData = data.GetRange(data.Count - amount, amount);
+        data.RemoveRange(data.Count - amount, amount);
+        data.InsertRange(0, movedData);
 
     }
 }
