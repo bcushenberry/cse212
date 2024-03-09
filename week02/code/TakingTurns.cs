@@ -15,7 +15,9 @@
         // Console.WriteLine(players);    // This can be un-commented out for debug help
         while (players.Length > 0)
             players.GetNextPerson();
-        // Defect(s) Found: 
+        // Defect(s) Found: The players are not being displayed in the expected order. Instead of looping through all people once before starting again, the same person is displayed until they are completely out of the queue. FIFO order doesn't seem to be working here, either - we first add Bob x2, but GetNextPerson first displays Sue x3, which was added last. The order is LIFO, like a stack.
+        // Actual Result: Sue, Sue, Sue, Tim, Tim, Tim, Tim, Tim, Bob, Bob
+        // Fix: "Insert" is being used in PersonQueue to enqueue people to the list, rather than "Add". Changing "Insert" to "Add" fixed the issue.
 
         Console.WriteLine("---------");
 
@@ -38,7 +40,9 @@
         while (players.Length > 0)
             players.GetNextPerson();
 
-        // Defect(s) Found: 
+        // Defect(s) Found: This appears to be more or less the same issue as Test 1 - the players are displayed in LIFO order, and are not looped through individually but rather all at once. Once George is added to the end of the queue, he immediately displayed first three times.
+        // Actual Result: Sue, Sue, Sue, Tim, Tim, George, George, George, Tim, Tim, Tim, Bob, Bob 
+        // Fix: "Insert" is being used in PersonQueue to enqueue people to the list, rather than "Add". Changing "Insert" to "Add" fixed the issue.        
 
         Console.WriteLine("---------");
 
@@ -56,7 +60,9 @@
             players.GetNextPerson();
             // Console.WriteLine(players);
         }
-        // Defect(s) Found: 
+        // Defect(s) Found: As with the above tests, the names are displayed in LIFO order, and a single person's name is displayed for all of their turns at once before the next person's name is displayed. Additionally, Tim's name is only displayed once before being removed from the list entirely, so the last four loops display "No one is in the queue."
+        // Actual Result: Sue, Sue, Sue, Tim, Bob, Bob, No one is in the queue., No one is in the queue., No one is in the queue., No one is in the queue.
+        // Fix: GetNextPerson() was not keeping people with 0 or negative turns in the queue. To fix this, a new check was added to GetNextPerson() to see if the person's initial number of turns is <= 0, and if so, they automatically get queued. In order to avoid having an infinite loop, people who start with more than 0 turns have their turns reduced until they hit 0, at which point they are no longer enqueued.
 
         Console.WriteLine("---------");
 
@@ -73,7 +79,9 @@
             players.GetNextPerson();
             // Console.WriteLine(players);
         }
-        // Defect(s) Found: 
+        // Defect(s) Found: As with the above tests, the names are displayed in LIFO order, and a single person's name is displayed for all of their turns at once before the next person's name is displayed. Additionally, Tim is only displayed once before being removed from the list, and the last six loops only display "No one is in the queue."
+        // Actual Result: Sue, Sue, Sue, Tim, No one is in the queue., No one is in the queue., No one is in the queue., No one is in the queue., No one is in the queue., No one is in the queue.
+        // Fix: GetNextPerson() was not keeping people with 0 or negative turns in the queue. To fix this, a new check was added to GetNextPerson() to see if the person's initial number of turns is <= 0, and if so, they automatically get queued. In order to avoid having an infinite loop, people who start with more than 0 turns have their turns reduced until they hit 0, at which point they are no longer enqueued.
 
         Console.WriteLine("---------");
 
@@ -83,6 +91,6 @@
         Console.WriteLine("Test 5");
         players = new TakingTurnsQueue();
         players.GetNextPerson();
-        // Defect(s) Found:
+        // Defect(s) Found: None - the error message "No one in the queue." is displayed properly.
     }
 }
