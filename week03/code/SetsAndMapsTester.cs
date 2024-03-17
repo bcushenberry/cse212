@@ -111,6 +111,25 @@ public static class SetsAndMapsTester {
         // To display the pair correctly use something like:
         // Console.WriteLine($"{word} & {pair}");
         // Each pair of words should displayed on its own line.
+
+        var wordSet = new HashSet<string>(words);
+
+        foreach (var word in wordSet)
+        {
+            // There is more than one way to do this, of course, but since we know the words are all two letters long, all lowercase, and there are no duplicates, we can convert them to character arrays and then reverse them and still remain performant.
+            var characters = word.ToCharArray();
+            Array.Reverse(characters);
+            var pair = new string(characters);
+
+            // Not sure that this is the best way to do it, but we can remove the word from our set in order to prevent the same pair from showing up twice. Removing is done in O(1) time, so it shouldn't significantly affect performance.
+            wordSet.Remove(word);
+
+            // We then check to see if the reversed word is in the set of words. If so, we write it out with its partner.
+            if (wordSet.Contains(pair))
+            {
+                Console.WriteLine($"{word} & {pair}");
+            }
+        }
     }
 
     /// <summary>
@@ -132,6 +151,19 @@ public static class SetsAndMapsTester {
         foreach (var line in File.ReadLines(filename)) {
             var fields = line.Split(",");
             // Todo Problem 2 - ADD YOUR CODE HERE
+            int degreeCount = 1;
+            string degree = fields[3];
+            // We need to check and see if the degree (key) is in the dictionary already.
+            // If so, we add to the running degree count (the key's value).
+            // If not, we assign the key a new running degree count.
+            if (degrees.ContainsKey(degree))
+            {
+                degrees[degree] += degreeCount;
+            }
+            else 
+            {
+                degrees[degree] = degreeCount;
+            }
         }
 
         return degrees;
@@ -158,7 +190,50 @@ public static class SetsAndMapsTester {
     /// #############
     private static bool IsAnagram(string word1, string word2) {
         // Todo Problem 3 - ADD YOUR CODE HERE
-        return false;
+        Dictionary<char, int> CreateWordMap(string word)
+        {
+            var wordMap = new Dictionary<char, int>();
+
+            word = word.ToLower();
+            foreach (var letter in word)
+            {
+                if (letter == ' ')
+                {
+                    continue;
+                }
+                else if (!wordMap.ContainsKey(letter))
+                {
+                    wordMap[letter] = 1;
+                }
+                else
+                {
+                    wordMap[letter] += 1;
+                }
+            }
+
+            return wordMap;
+        }
+
+        var firstWord = CreateWordMap(word1);
+        var secondWord = CreateWordMap(word2);
+        int matchCount = 0;
+
+        foreach (var (key, value) in firstWord)
+        {
+            if (secondWord.ContainsKey(key) && secondWord[key] == value)
+            {
+                matchCount++;
+            }
+        }
+
+        if (firstWord.Count() == secondWord.Count() && matchCount == firstWord.Count())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     /// <summary>
