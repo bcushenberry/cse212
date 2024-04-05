@@ -67,7 +67,7 @@ public static class RecursionTester {
         Console.WriteLine(CountWaysToClimb(20)); // 121415
         // Uncomment out the test below after implementing memoization.  It won't work without it.
         // TODO Problem 3
-        // Console.WriteLine(CountWaysToClimb(100));  // 180396380815100901214157639
+        Console.WriteLine(CountWaysToClimb(100));  // 180396380815100901214157639
 
         // Sample Test Cases (may not be comprehensive) 
         Console.WriteLine("\n=========== PROBLEM 4 TESTS ===========");
@@ -147,7 +147,17 @@ public static class RecursionTester {
     /// </summary>
     public static int SumSquaresRecursive(int n) {
         // TODO Start Problem 1
-        return 0;
+        if (n <= 0) {
+            return 0;
+        }
+        
+        else if (n == 1) {
+            return 1;
+        }
+
+        else {
+            return n*n + SumSquaresRecursive(n-1);
+        }
     }
 
     /// <summary>
@@ -171,6 +181,18 @@ public static class RecursionTester {
     /// </summary>
     public static void PermutationsChoose(string letters, int size, string word = "") {
         // TODO Start Problem 2
+        if (word.Length == size)
+        {
+            Console.WriteLine(word);
+        }
+        else
+        {
+            for (var i = 0; i < letters.Length; i++)
+            {
+                var lettersLeft = letters.Remove(i, 1);
+                PermutationsChoose(lettersLeft, size, word + letters[i]);
+            }
+        }
     }
 
     /// <summary>
@@ -230,8 +252,22 @@ public static class RecursionTester {
             return 4;
 
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        if (remember == null)
+        {
+            remember = new Dictionary<int, decimal>();
+        }
+        
+        if (remember.ContainsKey(s))
+        {
+            return remember[s];
+        }
+        else
+        {
+        decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+
+        remember[s] = ways;
         return ways;
+        }
     }
 
     /// <summary>
@@ -249,6 +285,41 @@ public static class RecursionTester {
     /// </summary>
     public static void WildcardBinary(string pattern) {
         // TODO Start Problem 4
+        // Probably unnecessary for this activity, but just in case
+        if (pattern.Length <= 0)
+            Console.WriteLine("Empty string");
+
+        // Also probably unnecessary
+        if (!pattern.Contains("*"))
+            return;
+
+        // I'm pretty certain this is not how this problem was meant to be solved,
+        // but it technically works and is using recursion.
+        else {
+            int index = pattern.IndexOf("*");
+            string firstPart = pattern[..index];
+            string secondPart = pattern[(index+1)..];
+            char replace = pattern[index];
+            string newPattern = firstPart + replace + secondPart;
+
+            if (replace == '*')
+            {
+                replace = '0';
+                newPattern = firstPart + replace + secondPart;
+                if (!newPattern.Contains('*'))
+                    Console.WriteLine(newPattern);
+                WildcardBinary(newPattern);
+            }
+
+            if (replace == '0')
+            {
+                replace = '1';
+                newPattern = firstPart + replace + secondPart;
+                if (!newPattern.Contains('*'))
+                    Console.WriteLine(newPattern);
+                WildcardBinary(newPattern);                
+            }
+        }
     }
 
     /// <summary>
