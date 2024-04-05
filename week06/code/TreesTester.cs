@@ -32,6 +32,7 @@ public static class TreesTester {
         }
 
         Console.WriteLine("\n=========== PROBLEM 4 TESTS ===========");
+        Console.WriteLine(tree.ToString());
         Console.WriteLine(tree.GetHeight()); // 3
         tree.Insert(6);
         Console.WriteLine(tree.GetHeight()); // 3
